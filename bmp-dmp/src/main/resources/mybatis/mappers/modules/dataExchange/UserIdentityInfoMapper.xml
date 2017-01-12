@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whty.dmp.modules.dataExchange.dao.UserIdentityInfoDao">
+
+  <!-- 
+       1.增加、删除、修改 适用于数据的订阅
+       2.根据时间条件查询适用于数据的发布
+   -->
+
+    <sql id="resultColumn">
+        ID as id,
+        PERSON_ID as userId,
+        GROUP_ID as orgId,
+        IDENTITY_ID as identityId
+    </sql>
+    
+    <!-- 查询单个 -->
+    <select id="selectOne" parameterType="UserIdentityInfoVo" resultType="UserIdentityInfoVo">
+        select <include refid="resultColumn" />
+        from t_user_group_identity where 1=1 
+        <if test="id !=null and id !=''">
+            and ID = #{id}
+        </if>
+        <if test="userId !=null and userId !=''">
+            and PERSON_ID = #{userId}
+        </if>
+        <if test="orgId !=null and orgId !=''">
+            and GROUP_ID = #{orgId}
+        </if>
+        <if test="category !=null and category !=''">
+            and IDENTITY_ID = #{identityId}
+        </if>
+    </select>
+    
+    <!-- 查询新增列表 -->
+    <select id="selectCreateList" parameterType="UserIdentityInfoVo" resultType="UserIdentityInfoVo">
+        select <include refid="resultColumn" />
+        from t_user_group_identity
+        create_time &gt;= #{createTime}
+        <if test="endTime !=null and endTime !=''">
+            and create_time &lt;= #{endTime}
+        </if>
+    </select>
+    
+    
+    <!-- 查询更新列表 -->
+    <select id="selectUpdateList" parameterType="UserIdentityInfoVo" resultType="UserIdentityInfoVo">
+        select <include refid="resultColumn" />
+        from t_user_group_identity
+        b.update_time &gt;= #{updateTime}
+        <if test="endTime !=null and endTime !=''">
+            and b.update_time &lt;= #{endTime}
+        </if>
+    </select>
+    
+    <!-- 根据主键删除 -->
+    <delete id="delete" parameterType="UserIdentityInfoVo">
+        delete from t_user_group_identity
+              where ID = #{id}
+    </delete>
+    
+    <!-- 插入 -->
+    <insert id="insert" parameterType="UserIdentityInfoVo">
+        insert into t_user_group_identity(
+            ID,
+            PERSON_ID,
+            GROUP_ID,
+            IDENTITY_ID
+        ) values (
+            #{id},
+            #{userId},
+            #{orgId},
+            #{identityId}
+        )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="UserIdentityInfoVo">
+        update t_user_group_identity
+        <set>
+            <if test="userId != null and userId !=''">PERSON_ID=#{userId}</if>
+            <if test="orgId != null and orgId !=''">GROUP_ID=#{orgId},</if>
+            ID = #{id}
+        </set>
+        where ID = #{id}
+    </update>
+    
+</mapper>

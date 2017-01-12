@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whty.dmp.modules.admin.dao.ConfigDataDao">
+
+	<sql id="resultColumn">
+		id,
+		name,
+        code,
+        data_type,
+		create_by as createBy,
+		create_time as createTime,
+		update_by as updateBy,
+		update_time as updateTime,
+		job_status
+	</sql>
+
+	<!-- 查询单个 -->
+	<select id="selectOne" parameterType="ConfigDataVo" resultType="ConfigDataVo">
+		select
+		<include refid="resultColumn" />
+		from config_data
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="name != null and name !=''">
+				AND name = #{name}
+			</if>
+            <if test="code != null and code !=''">
+                AND code = #{code}
+            </if>
+			<if test="jobStatus != null and jobStatus !=''">
+				AND job_status = #{jobStatus}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 查询列表 -->
+	<select id="selectList" parameterType="ConfigDataVo" resultType="ConfigDataVo">
+		select
+		<include refid="resultColumn" />
+		from config_data
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="name != null and name !=''">
+				AND name like '%${name}%'
+			</if>
+            <if test="code != null and code !=''">
+                AND code = #{code}
+            </if>
+			<if test="dataType != null and dataType !=''">
+				AND data_type = #{dataType}
+			</if>
+			<if test="jobStatus != null and jobStatus !=''">
+				AND job_status = #{jobStatus}
+			</if>
+		</trim>
+	</select>
+
+	<!-- 根据主键删除 -->
+	<delete id="delete" parameterType="ConfigDataVo">
+		delete from config_data
+		where id = #{id}
+	</delete>
+
+	<!-- 插入 -->
+	<insert id="insert" parameterType="ConfigDataVo">
+		insert into config_data(
+		id,
+		name,
+        code,
+        data_type,
+		create_by,
+		create_time,
+		update_by,
+		update_time,
+		job_status
+		) values (
+		#{id},
+		#{name},
+        #{code},
+        #{dataType},
+		#{createBy},
+		#{createTime},
+		#{updateBy},
+		#{updateTime},
+        #{jobStatus}
+		)
+	</insert>
+
+	<!-- 更新 -->
+	<update id="update" parameterType="ConfigDataVo">
+		update config_data
+		<set>
+			<if test="name != null and name !=''">name=#{name},</if>
+            <if test="code != null and code !=''">code=#{code},</if>
+			<if test="dataType != null and dataType !=''">data_type=#{dataType},</if>
+            <if test="createTime != null">create_time=#{createTime},</if>
+            <if test="createBy != null and createBy !=''">create_by=#{createBy},</if>
+			<if test="updateTime != null">update_time=#{updateTime},</if>
+			<if test="updateBy != null and updateBy !=''">update_by=#{updateBy},</if>
+			<if test="jobStatus != null and jobStatus !=''">job_status=#{jobStatus}</if>
+		</set>
+		where id = #{id}
+	</update>
+
+</mapper>

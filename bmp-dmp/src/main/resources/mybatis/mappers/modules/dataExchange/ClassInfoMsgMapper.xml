@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whty.dmp.modules.dataExchange.dao.ClassInfoMsgDao">
+
+  <!-- 
+       1.增加、删除、修改 适用于数据的订阅
+       2.根据时间条件查询适用于数据的发布
+   -->
+ <!-- start  ###############发布相关的sql############### -->
+    <sql id="resultColumn">
+        class_id as id,
+        class_code as classCode,
+        class_name as className,
+        class_type as classType,
+        to_char(found_time,'yyyy-MM-dd') as foundTime,
+        grade,
+        grade_class as gradeClass,
+        graduation_time as graduationTime,
+        orga_id as orgaId,
+        status,
+        study_phase as studyPhase
+    </sql>
+  
+    
+    <!-- 查询未同步的数据列表 -->
+    <select id="selectList" parameterType="ClassInfoMsgVo" resultType="ClassInfoMsgVo">
+        select <include refid="resultColumn" />
+        from t_class_info c where 
+        <![CDATA[
+        c.data_ex_flag = #{dataExFlag} and c.data_ex_from = #{dataExFrom} and rowNum <= 200 
+        ]]>
+    </select>
+    
+    <!-- 查询删除的数据列表 -->
+    <select id="selectDeleteList" parameterType="ClassInfoMsgVo" resultType="ClassInfoMsgVo">
+        select  class_id as id,class_code as classCode,class_name as className,class_type as classType,
+        to_char(found_time,'yyyy-MM-dd') as foundTime,grade,grade_class as gradeClass,graduation_time as graduationTime,
+        orga_id as orgaId,study_phase as studyPhase
+        from T_CLASS_DEL_FOR_SYN where
+         <![CDATA[
+        data_ex_flag = #{dataExFlag} and rowNum <= 200 
+        ]]>
+    </select>
+    
+    <update id="updateFlagBatch" parameterType="list">
+    	update t_class_info set data_ex_flag = '9' 
+    	where class_id in 
+    	 <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+    
+    <update id="updateFlagSingle" parameterType="DataLogVo">
+    	update t_class_info set 
+    	<choose>
+    		<when test="dataStatus=='0'.toString() ">
+    			data_ex_flag = '9' 
+    		</when>
+    		<otherwise>
+    			data_ex_flag = '10' 
+    		</otherwise>
+    	</choose>
+    	where class_id = #{objId}
+    </update>
+    
+    <update id="updateDelFlagBatch" parameterType="list">
+    	update T_CLASS_DEL_FOR_SYN set data_ex_flag = '9' 
+    	where class_id in 
+    	 <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+    
+    <update id="updateDelFlagSingle" parameterType="DataLogVo">
+    	update T_CLASS_DEL_FOR_SYN set 
+    	<choose>
+    		<when test="dataStatus=='0'.toString() ">
+    			data_ex_flag = '9' 
+    		</when>
+    		<otherwise>
+    			data_ex_flag = '10' 
+    		</otherwise>
+    	</choose>
+    	where class_id = #{objId}
+    </update>
+  <!-- end  ###############发布相关的sql############### --> 
+  
+  <!-- start  ###############订阅相关的sql############### -->        
+    <!-- 插入 -->
+    <insert id="insert" parameterType="ClassInfoMsgVo">
+        insert into t_class_info(
+            class_id,
+            class_code,
+            class_name,
+            class_type,
+            found_time,
+            grade,
+            study_phase,
+            grade_class,
+            graduation_time,
+            orga_id,
+            status,
+            created,
+            data_ex_from
+        ) values (
+            #{id},
+            #{classCode},
+            #{className},
+            #{classType},
+            to_date(#{foundTime},'yyyy-MM-dd'),
+            #{grade},
+            #{studyPhase},
+            #{gradeClass},
+            #{graduationTime},
+            #{orgaId},
+            #{status},
+            sysdate,
+            '1'
+        )
+    </insert>
+    
+    <!-- 更新 -->
+    <update id="update" parameterType="ClassInfoMsgVo">
+        update t_class_info set 
+            <if test="classCode != null and classCode !=''">class_code=#{classCode},</if>
+            <if test="className != null and className !=''">class_name=#{className},</if>
+            <if test="classType != null and classType !=''">class_type=#{classType},</if>
+            <if test="foundTime != null and foundTime !=''">found_time= to_date(#{foundTime},'yyyy-MM-dd'),</if>
+            <if test="grade != null and grade !=''">grade=#{grade},</if>
+            <if test="studyPhase != null and studyPhase !=''">study_phase=#{studyPhase},</if>
+            <if test="gradeClass != null and gradeClass !=''">grade_class=#{gradeClass},</if>
+            <if test="graduationTime != null and graduationTime !=''">graduation_time=#{graduationTime},</if>
+            <if test="orgaId != null and orgaId !=''">orga_id=#{orgaId},</if>
+            <if test="status != null and status !=''">status=#{status},</if>
+            update_time=sysdate
+        where class_id = #{id} and DATA_EX_FROM = '1' 
+    </update>
+       
+    <!-- 根据主键删除 -->
+    <delete id="delete" parameterType="ClassInfoMsgVo">
+        delete from t_class_info
+              where class_id = #{id} and DATA_EX_FROM='1' 
+    </delete>
+  <!-- end  ###############订阅相关的sql############### -->
+     
+    <!-- 查询单个 -->
+    <select id="selectOne" parameterType="ClassInfoMsgVo" resultType="ClassInfoMsgVo">
+        select <include refid="resultColumn" />
+        <![CDATA[
+        from t_class_info where class_id = #{id} 
+        ]]>
+    </select>
+</mapper>

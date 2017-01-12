@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whty.dmp.modules.dataExchange.dao.BindParentMsgDao">
+
+  <!-- 
+       1.增加、删除、修改 适用于数据的订阅
+       2.根据时间条件查询适用于数据的发布
+   -->
+
+    <sql id="resultColumn">
+        bidn_id as id,
+        child_id as childId,
+        parent_id as parentId
+    </sql>
+    
+    <!-- 查询单个 -->
+    <select id="selectOne" parameterType="BindParentMsgVo" resultType="BindParentMsgVo">
+        select <include refid="resultColumn" />
+        from t_bind_paernt where bidn_id = #{id}
+    </select>
+    
+    <!-- 查询新增列表 -->
+    <select id="selectCreateList" parameterType="BindParentMsgVo" resultType="BindParentMsgVo">
+        select <include refid="resultColumn" />
+        from t_bind_paernt b where
+        b.create_time &gt;= #{createTime}
+        <if test="endTime !=null and endTime !=''">
+            and b.create_time &lt;= #{endTime}
+        </if>
+    </select>
+    
+    
+    <!-- 查询更新列表 -->
+    <select id="selectUpdateList" parameterType="BindParentMsgVo" resultType="BindParentMsgVo">
+        select <include refid="resultColumn" />
+        from t_bind_paernt b where 
+        b.update_time &gt;= #{updateTime}
+        <if test="endTime !=null and endTime !=''">
+            and b.update_time &lt;= #{endTime}
+        </if>
+    </select>
+    
+    <!-- 根据主键删除 -->
+    <delete id="delete" parameterType="BindParentMsgVo">
+        delete from t_bind_paernt
+              where bidn_id = #{id}
+    </delete>
+    
+    <!-- 插入 -->
+    <insert id="insert" parameterType="BindParentMsgVo">
+        insert into t_bind_paernt(
+            bidn_id,
+            parent_id,
+            child_id,
+            create_time
+        ) values (
+            #{id},
+            #{parentId},
+            #{childId},
+            #{createTime}
+        )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="BindParentMsgVo">
+        update t_bind_paernt
+        <set>
+            <if test="parentId != null and parentId !=''">parent_id=#{parentId},</if>
+            <if test="childId != null and childId !=''">child_id=#{childId},</if>
+            <if test="updateTime != null">update_time=#{updateTime},</if>
+        </set>
+        where bidn_id = #{id}
+    </update>
+    
+</mapper>

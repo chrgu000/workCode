@@ -1,0 +1,158 @@
+@charset "utf-8";
+.index_page{ min-width:1000px;}
+/*头部*/
+.bo_header{ width:100%; margin:0 auto; }
+.bo_topbar{ background:#f7f7f7; height:48px; padding:5px 10px;}
+.bo_topbar .logo{ float:left;}
+.bo_topbar .logo a{ display:inline-block; vertical-align:middle;}
+.bo_topbar .logo span{ font-size:22px; line-height:22px; height:22px; vertical-align:middle; padding-left:10px; color:#144796; letter-spacing:2px; font-weight:bold; }
+.bo_topbar .mininav{ float:right; padding: 15px 0;}
+span.uer_name a{ color:#555;}
+span.uer_name em{ padding:0 12px 0 5px;}
+span.uer_li a { display:inline-block; line-height:16px; padding-left:12px; color:#555; }
+span.uer_li a:hover{ color:#238fe2; }
+span.uer_li a i{width:16px; height:16px; background:url(../../images/whty/wd_ico.png) no-repeat; margin-right:5px; display:inline-block; vertical-align:top;}
+span.uer_li a.ico1 i{ background-position:0px 0px;}
+span.uer_li a.ico2 i{ background-position:-22px 0px;}
+span.uer_li a.ico3 i{ background-position:-44px 0px;}
+.bo_nav{ height:40px; line-height:40px; border-top:1px solid #478ac2; border-bottom:1px solid #478ac2; background:#61a2d8;}
+.bo_nav a,.bo_nav span{ color:#fff; padding:0 25px; display:inline-block; float:left; font-weight:bold;}
+.bo_nav span.place{ border-right:1px solid #478ac2; height:100%;}
+.bo_nav a.next{background:url(../../images/whty/wd_navbg.gif) right no-repeat;}
+
+/*右侧*/
+.bo_main{ margin:15px;}
+.main_right{ margin-left:180px; }
+.main_right .mainiframe{}
+
+/*底部*/
+.bo_footer{ height:18px; line-height:18px; background:#61a2d8; color:#fff; padding:10px;}
+
+/*中间*/
+.bo_container{ width:100%; margin:0 auto;}
+/*左侧*/
+.main_left{ float:left; width:180px; margin-right:-180px; overflow-x:hidden;overflow-y:auto;background:#eeeeee; }
+.main_left .title{ width:160px; font-size:14px; font-weight:bold; height:25px; line-height:25px; border-bottom:1px solid #dadada; padding:10px;}
+.main_left .tree_nav {width:180px;}
+.main_left dl dt{ width:180px; font-size:14px; font-weight:bold; height:45px; line-height:45px;cursor:pointer;}
+.main_left dl dt span{ display:block; height:44px; line-height:44px; border-bottom:1px solid #dadada; padding-left:10px;}
+.main_left dl.cur dt span{ border-bottom:none; height:45px;background:url(../../images/whty/wd_off.png) no-repeat 30px 38px;}
+.main_left dl dd{width:180px; overflow:hidden; height:0;}
+.main_left dl dd ul li{ background:#fff; height:35px; line-height:35px; border-bottom:1px solid #dadada;}
+.main_left dl dd ul li a{ color:#555; display:inline-block;padding:10px 0 10px 40px; width:140px; line-height:15px;}
+.main_left dl dd ul li.on a{ background:#fafafa; font-weight:bold;}
+
+/*sider图标*/
+.main_left dl dt i{ background:url(../../images/whty/wd_list_ico.gif) no-repeat; width:20px; height:21px; display: inline-block; vertical-align:middle; margin-right:10px; /*position:absolute; bottom:13px; left:10px;*/}
+.main_left dl dt i.ico1{ background-position:0px -22px; }
+.main_left dl dt i.ico2{ background-position:0px -70px;}
+.main_left dl dt i.ico3{ background-position:0px -118px;}
+.main_left dl dt i.ico4{ background-position:0px -171px;}
+.main_left dl dt i.ico5{ background-position:0px -223px;}
+.main_left dl dt i.ico6{ background-position:0px -274px;}
+.main_left dl dt i.ico7{ background-position:0px -328px;}
+.main_left dl dt i.ico8{ background-position:0px -379px;}
+.main_left dl dt i.ico9{ background-position:0px -432px;}
+.main_left dl dt i.ico10{ background-position:0px -483px;}
+.main_left dl dt i.ico11{ background-position:0px -536px;}
+.main_left dl dt i.ico12{ background-position:0px -589px;}
+.main_left dl dt i.ico13{ background-position:0px -638px;}
+.main_left dl dt i.ico14{ background-position:0px -692px;}
+.main_left dl dt i.ico15{ background-position:0px -742px;}
+.main_left dl dt i.ico16{ background-position:0px -795px;}
+.main_left dl dt i.ico17{ background-position:0px -848px}
+
+/*进入欢迎页*/
+.wd_welcome{ background:#f7f7f7; border:1px solid #e9e9e9; padding:15px 20px; _padding:20px;*padding:20px; height:auto; overflow:hidden;}
+.wd_title{ border-bottom:3px solid #efefef; color:#3b6baa; font-size:14px; font-weight:normal; padding-bottom:5px; }
+.task-alert ul li{ border-bottom:1px dotted #e0e0e0; padding:10px 0; }
+.task-alert ul li strong{color:#4186bf}
+.control-box p{ line-height:1.8em}
+.control-box p span{color:#4186bf}
+.use-help td{ padding: 10px} 
+.use-help th{ text-align:left;  padding:10px; }
+.use-help th a.h1{background:url(../../images/whty/help-ico1.gif) no-repeat 0 center; padding-left:20px}
+.use-help th a.h2{background:url(../../images/whty/help-ico2.gif) no-repeat 0 center; padding-left:20px}
+.wd_cont{ padding:15px 0;}
+.wd_rbox{ position:relative}
+.wd_rbox .img{width:100px; position:absolute;left:0; top:15px;}
+.wd_rbox .txt{ margin-left:120px; min-height:99px;}
+
+/*错误页面*/
+.error_page{ text-align:center;}
+.error_page .error_cont{position:absolute; top:50%; left:50%; margin-top:-110px; margin-left:-295px;}
+.error_page .error_cont p{ padding-top:30px;}
+.error_page .error_cont a{ margin:0 10px;}
+
+/*容器标题公共模块 begin*/
+.bo_box{padding-bottom: 20px;}
+.bo_title{background-color: #e2e2e2; border:1px solid #cccccc; height: 40px; line-height: 40px;}
+.bo_title span i.ico{ display: inline-block;vertical-align: middle; width:22px; height: 16px; background-image: url(../../images/whty/tit_ico.png);  background-repeat: no-repeat;margin:0 10px 0 5px;}
+.bo_title span i.ico1{background-position: center 0;}
+.bo_title span i.ico2{background-position: center -40px;}
+.bo_title span i.ico3{background-position: center -80px;}
+.code_numBox,.code_stateBox{border: 1px solid #ccc;border-top: 0;}
+
+/*table公共模块*/
+.code_table{margin-top: -1px;}
+.mod_table{ background:#ccc;word-break:break-all; word-wrap:break-all;}
+.mod_table th{ background:#eee;color:#555;line-height:2em;padding:5px;text-align:left; border:1px solid #ccc;}
+.mod_table td{ background:#fff;padding:10px 5px;border:1px solid #ccc;}
+.mod_table th.tc{ text-align:center;}
+.mod_table td.set a{ display:inline-block; margin:0 5px 0 0;}
+.mod_table.t_c th{ text-align: center;}
+.mod_table.t_c td{ text-align: center;}
+
+/*数据指标*/
+.code_numBox ul li{ float: left;width: 25%; text-align: center; border-right:1px solid #ccc; margin-left: -1px; height: 114px;padding-top: 14px;}
+.code_numBox ul li.last{ border:0;}
+.code_numBox ul li p{line-height: 24px; height: 24px; overflow: hidden;white-space: nowrap; text-overflow:ellipsis;padding: 0 10px;}
+.code_numBox ul li p.num{ font-size: 36px; height: 42px; line-height: 42px;padding: 5px 10px;}
+.code_numBox ul li p.num1{color: #3d9ceb}
+.code_numBox ul li p.num2{color: #f65968}
+.code_numBox ul li p.num3{color: #fab04f}
+.code_numBox ul li p.num4{color: #56e14f}
+.code_numBox ul li p.c999 i{ display: inline-block; vertical-align: middle; width: 7px; height: 14px; background-image: url(../../images/whty/needle_ico.png); background-repeat: no-repeat;margin-left: 5px;}
+.code_numBox ul li p.c999 i.up{ background-position:center top; }
+.code_numBox ul li p.c999 i.down{ background-position:center bottom; }
+
+/*使用状态统计*/
+.stats-canvas{ height:330px;}
+
+
+/*基本信息*/
+.base_title{ border-bottom:#bcbcbc solid 2px; font-size:14px; color:#555; line-height:28px; height:28px; padding:5px;}
+.left_titul{ border-bottom:#e0e4e6 solid 1px;color:#333; height:35px; line-height:32px; clear:both;_position:relative;background:#f8f8f8;}
+.left_titul p{ border-left:#e0e4e6 solid 1px; clear:both; width:auto; zoom:1;overflow:hidden;}
+.left_titul p a{ float:left; padding:0px 25px;background:#f8f8f8;border-top:#f8f8f8 solid 3px; border-right:#e0e0e0 solid 1px; cursor:pointer;font-size:14px; color:#656565;font-weight:bold;text-decoration:none;}
+.left_titul p a.on{ background:#fff; height:33px;border-top:3px solid #38a2db;_margin-bottom:-1px;_position:relative;}
+.tab_new{  padding:10px; border:1px solid #E0E0E0; border-top:0 none;}
+
+.sel{ padding:0 5px; height:30px; border:1px solid #ccc;}
+.sel:hover{ border:1px solid #3d95d5;}
+
+.txq_infor{ color:#555;}
+.txq_infor table td{ color:#555; padding:8px 2px;}
+txq_infor label.error, label.error {
+	/* remove the next line when you have trouble in IE6 with labels in list */
+	color: red;
+	font-style: italic
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

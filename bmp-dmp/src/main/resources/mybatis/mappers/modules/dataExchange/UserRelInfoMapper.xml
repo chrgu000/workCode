@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whty.dmp.modules.dataExchange.dao.UserRelInfoDao">
+
+  <!-- 
+       1.增加、删除、修改 适用于数据的订阅
+       2.根据时间条件查询适用于数据的发布
+   -->
+
+    <sql id="resultColumn">
+        T_USER_GROUP_ID as id,
+        PERSON_ID as userId,
+        GROUP_ID as orgId,
+        STATUS as status,
+        GROUP_CATEGORY as category
+    </sql>
+    
+    <!-- 查询单个 -->
+    <select id="selectOne" parameterType="UserRelInfoVo" resultType="UserRelInfoVo">
+        select <include refid="resultColumn" />
+        from t_user_group_rel where 1=1 
+        <if test="userId !=null and userId !=''">
+            and PERSON_ID = #{userId}
+        </if>
+        <if test="orgId !=null and orgId !=''">
+            and GROUP_ID = #{orgId}
+        </if>
+        <if test="category !=null and category !=''">
+            and GROUP_CATEGORY = #{category}
+        </if>
+        <if test="status !=null and status !=''">
+            and STATUS = #{status}
+        </if>
+    </select>
+    
+    <!-- 查询新增列表 -->
+    <select id="selectCreateList" parameterType="UserRelInfoVo" resultType="UserRelInfoVo">
+        select <include refid="resultColumn" />
+        from t_user_group_rel
+        join_in_time &gt;= #{createTime}
+        <if test="endTime !=null and endTime !=''">
+            and join_in_time &lt;= #{endTime}
+        </if>
+    </select>
+    
+    
+    <!-- 查询更新列表 -->
+    <select id="selectUpdateList" parameterType="UserRelInfoVo" resultType="UserRelInfoVo">
+        select <include refid="resultColumn" />
+        from t_user_group_rel
+        b.update_time &gt;= #{updateTime}
+        <if test="endTime !=null and endTime !=''">
+            and b.update_time &lt;= #{endTime}
+        </if>
+    </select>
+    
+    <!-- 根据主键删除 -->
+    <delete id="delete" parameterType="UserRelInfoVo">
+        delete from t_user_group_rel
+              where T_USER_GROUP_ID = #{id}
+    </delete>
+    
+    <!-- 插入 -->
+    <insert id="insert" parameterType="UserRelInfoVo">
+        insert into t_user_group_rel(
+            T_USER_GROUP_ID,
+            PERSON_ID,
+            GROUP_ID,
+            GROUP_CATEGORY,
+            STATUS,
+            JOIN_IN_TIME,
+            DATA_FROM
+        ) values (
+            #{id},
+            #{userId},
+            #{orgId},
+            #{category},
+            #{status},
+            #{createTime},
+            #{dataFrom}
+        )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="UserRelInfoVo">
+        update t_user_group_rel
+        <set>
+            <if test="userId != null and userId !=''">PERSON_ID=#{userId}</if>
+            <if test="classInfoId != null and classInfoId !=''">GROUP_ID=#{orgId},</if>
+            UPDATETIME = sysdate
+        </set>
+        where T_USER_GROUP_ID = #{id}
+    </update>
+    
+</mapper>

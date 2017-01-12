@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whty.dmp.modules.dataExchange.dao.AccountMsgDao">
+
+  <!-- 
+       1.增加、删除、修改 适用于数据的订阅
+       2.根据时间条件查询适用于数据的发布
+   -->
+
+    <sql id="resultColumn">
+        account_id as id,
+        person_id as userId,
+        account,
+        password,
+        status
+    </sql>
+    
+    <!-- 查询单个 -->
+    <select id="selectOne" parameterType="AccountMsgVo" resultType="AccountMsgVo">
+        select <include refid="resultColumn" />
+        from t_account where account_id = #{id}
+    </select>
+    
+    <!-- 查询新增列表 -->
+    <select id="selectCreateList" parameterType="AccountMsgVo" resultType="AccountMsgVo">
+        select <include refid="resultColumn" />
+        from t_account b 
+        where b.data_from = '0' and 
+        b.create_time &gt;= #{createTime}
+        <if test="nowTime !=null and nowTime !=''">
+            and b.create_time &lt;= #{nowTime}
+        </if>
+    </select>
+    
+    
+    <!-- 查询更新列表 -->
+    <select id="selectUpdateList" parameterType="AccountMsgVo" resultType="AccountMsgVo">
+        select <include refid="resultColumn" />
+        from t_account b 
+        where b.data_from = '0' and 
+        b.update_time &gt;= b.create_time and 
+        b.update_time &gt;= #{updateTime}
+        <if test="nowTime !=null and nowTime !=''">
+            and b.update_time &lt;= #{nowTime}
+        </if>
+    </select>
+    
+    <!-- 根据主键删除 -->
+    <delete id="delete" parameterType="AccountMsgVo">
+        delete from t_account
+              where account_id = #{id}
+    </delete>
+    
+    <!-- 插入 -->
+    <insert id="insert" parameterType="AccountMsgVo">
+        insert into t_account(
+            account_id,
+            person_id,
+            account,
+            password,
+            status,
+            sys_genertor,
+            create_time,
+            account_type,
+            data_from
+        ) values (
+            #{id},
+            #{userId},
+            #{account},
+            #{password},
+            #{status},
+            #{sysGenerator},
+            #{createTime},
+            #{accountType},
+            #{dataFrom}
+        )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="AccountMsgVo">
+        update t_account
+        <set>
+            <if test="password != null and password !=''">password=#{password},</if>
+            <if test="status != null and status !=''">status=#{status},</if>
+            <if test="updateTime != null">update_time=#{updateTime}</if>
+        </set>
+        where account_id = #{id}
+    </update>
+    
+    
+</mapper>

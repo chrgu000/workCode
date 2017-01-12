@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whty.dmp.modules.dataExchange.dao.DataPublishLogDao">
+
+    <sql id="resultColumn">
+        id,
+        obj_id as objId,
+        service_code as serviceCode,
+        data_json as dataJson,
+        data,
+        operator_type as operatorType,
+        create_by as createBy,
+        create_time as createTime,
+        update_by as updateBy,
+        update_time as updateTime,
+        data_status as dataStatus,
+        error_msg as errorMsg
+        
+    </sql>
+    
+    <!-- 查询单个 -->
+    <select id="selectOne" parameterType="DataLogVo" resultType="DataLogVo">
+        select <include refid="resultColumn" />
+        from data_publish_log where id = #{id}
+    </select>
+    
+    <!-- 查询列表 -->
+    <select id="selectList" parameterType="DataLogVo" resultType="DataLogVo">
+        select <include refid="resultColumn" />
+        from data_publish_log
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="objId != null and objId !=''">
+                AND obj_id = #{objId}
+            </if>
+            <if test="serviceCode != null and serviceCode !=''">
+                AND service_code = #{serviceCode}
+            </if>
+            <if test="data != null and data !=''">
+                AND data = #{data}
+            </if>
+            <if test="operatorType != null and operatorType !=''">
+                AND operator_type = #{operatorType}
+            </if>
+            <if test="dataStatus != null and dataStatus !=''">
+                AND data_status = #{dataStatus}
+            </if>
+        </trim>
+        order by create_time desc
+    </select>
+    
+    <!-- 根据主键删除 -->
+    <delete id="delete" parameterType="DataLogVo">
+        delete from data_publish_log
+              where id = #{id}
+    </delete>
+    
+    <!-- 插入 -->
+    <insert id="insert" parameterType="DataLogVo">
+        insert into data_publish_log(
+            id,
+            obj_id,
+            service_code,
+            data_json,
+            data,
+            operator_type,
+            create_by,
+            create_time,
+            data_status,
+            error_msg
+        ) values (
+            #{id},
+            #{objId},
+            #{serviceCode},
+            #{dataJson},
+            #{data},
+            #{operatorType},
+            #{createBy},
+            #{createTime},
+            #{dataStatus},
+            #{errorMsg}
+        )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="DataLogVo">
+        update data_publish_log
+        <set>
+            <if test="updateTime != null">update_time=#{updateTime},</if>
+            <if test="updateBy != null and updateBy !=''">update_by=#{updateBy},</if>
+            <if test="dataStatus != null and dataStatus !=''">data_status=#{dataStatus}</if>
+        </set>
+        where id = #{id}
+    </update>
+    
+    <!-- oracle 批量插入借助select * from dual union all ,mysql支持多种方式"," -->
+    <insert id="insertList" parameterType="list">
+        insert into data_publish_log
+        ( id,obj_id,service_code,data_json,data,operator_type,create_by,create_time,data_status) 
+        <foreach collection="list" item="item" separator="union all">
+            (select #{item.id},#{item.objId},#{item.serviceCode},#{item.dataJson},#{item.data},#{item.operatorType},#{item.createBy}
+            ,#{item.createTime},#{item.dataStatus}
+                from dual
+            )
+        </foreach>
+    </insert>
+    
+    <delete id="deleteList" parameterType="list">
+        delete from data_publish_log
+        where id in 
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+    
+</mapper>

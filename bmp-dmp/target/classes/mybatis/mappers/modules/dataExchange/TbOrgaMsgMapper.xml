@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whty.dmp.modules.dataExchange.dao.TbOrgaMsgDao">
+
+  <!-- 
+       1.增加、删除、修改 适用于数据的订阅
+       2.根据时间条件查询适用于数据的发布
+   -->
+ <!-- start  ###############发布相关的sql############### -->
+    <sql id="resultColumn">
+        orga_id as id,
+        orga_name as orgaName,
+        orga_code as orgaCode,
+        orga_domain as orgaDomain,
+        region_id as regionId,
+        province_code as provinceCode,
+        city_code as cityCode,
+        area_code as areaCode,
+        orga_type as orgaType,
+        parent_id as parentId,
+        level as orgaLevel,
+        sort_num as sortNum,
+        orga_address as orgaAddress
+        
+    </sql>
+    
+    <!-- 查询列表 -->
+    <select id="selectList" parameterType="TbOrgaMsgVo" resultType="TbOrgaMsgVo">
+        select <include refid="resultColumn" />
+        from tb_orga where
+         <![CDATA[
+        data_ex_flag = #{dataExFlag} and data_ex_from = #{dataExFrom} limit 200
+        ]]>
+    </select>
+    
+     <!-- 查询删除的数据列表 -->
+    <select id="selectDeleteList" parameterType="TbOrgaMsgVo" resultType="TbOrgaMsgVo">
+        select orga_id as id ,orga_name as orgaName,privince_code as provinceCode,city_code as areaCode,area_code as cityCode, orga_cage as orgaCage,parent_orga_id as parentOrgaId 
+        from T_ORG_DEL_FOR_SYN where
+         <![CDATA[
+        data_ex_flag = #{dataExFlag} limit 200
+        ]]>
+    </select>
+
+     <update id="updateFlagBatch" parameterType="list">
+    	update tb_orga set data_ex_flag = '9' 
+    	where orga_id in 
+    	 <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+    
+    <update id="updateFlagSingle" parameterType="DataLogVo">
+    	update tb_orga set 
+    	<choose>
+    		<when test="dataStatus=='0'.toString() ">
+    			data_ex_flag = '9' 
+    		</when>
+    		<otherwise>
+    			data_ex_flag = '10' 
+    		</otherwise>
+    	</choose>
+    	where orga_id = #{objId}
+    </update>
+    
+    <update id="updateDelFlagBatch" parameterType="list">
+    	update T_ORG_DEL_FOR_SYN set data_ex_flag = '9' 
+    	where orga_id in 
+    	 <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+    
+    <update id="updateDelFlagSingle" parameterType="DataLogVo">
+    	update T_ORG_DEL_FOR_SYN set 
+    	<choose>
+    		<when test="dataStatus=='0'.toString() ">
+    			data_ex_flag = '9' 
+    		</when>
+    		<otherwise>
+    			data_ex_flag = '10' 
+    		</otherwise>
+    	</choose>
+    	where orga_id = #{objId}
+    </update>
+  <!-- end  ###############发布相关的sql############### --> 
+  
+  <!-- start  ###############订阅相关的sql############### -->
+     <!-- 插入 -->
+    <insert id="insert" parameterType="TbOrgaMsgVo">
+        insert into t_organization(
+            orga_id,
+            orga_name,
+            privince_code,
+            area_code,
+            city_code,
+            orga_code,
+            orga_cage,
+            orga_type,
+            parent_orga_id,
+            status,
+            createtime,
+            data_ex_from
+        ) values (
+            #{id},
+            #{orgaName},
+            #{provinceCode},
+            #{cityCode},
+            #{areaCode},
+            #{orgaCode},
+            #{orgaCage},
+            #{orgaType},
+            #{parentOrgaId},
+            #{status},
+            sysdate,
+            '1'
+        )
+    </insert>
+    
+    <!-- 更新 -->
+    <update id="update" parameterType="TbOrgaMsgVo">
+        update t_organization set
+        	<if test="orgaName != null and orgaName !=''">orga_name=#{orgaName},</if>
+        	<if test="provinceCode != null and provinceCode !=''">privince_code=#{provinceCode},</if>
+            <if test="areaCode != null and areaCode !=''">area_code=#{cityCode},</if>
+            <if test="cityCode != null and cityCode !=''">city_code=#{areaCode},</if>
+            <if test="orgaCode != null and orgaCode !=''">orga_code=#{orgaCode},</if>
+            <if test="orgaCage != null and orgaCage !=''">orga_cage=#{orgaCage},</if>
+            <if test="orgaType != null and orgaType !=''">orga_type=#{orgaType},</if>
+            <if test="parentOrgaId != null and parentOrgaId !=''">parent_orga_id=#{parentOrgaId},</if>
+            <if test="status != null and status !=''">status=#{status},</if>
+           	update_time = sysdate 
+        where orga_id = #{id} and DATA_EX_FROM = '1' 
+    </update>
+    
+      <!-- 根据主键删除 -->
+    <delete id="delete" parameterType="TbOrgaMsgVo">
+        delete from t_organization
+              where orga_id = #{id} and DATA_EX_FROM='1' 
+    </delete>
+ <!-- end  ###############订阅相关的sql############### -->
+ 
+    <!-- 查询单个 -->
+    <select id="selectOne" parameterType="TbOrgaMsgVo" resultType="TbOrgaMsgVo">
+        select <include refid="resultColumn" />
+        from t_organization where orga_id = #{id}
+    </select>
+</mapper>

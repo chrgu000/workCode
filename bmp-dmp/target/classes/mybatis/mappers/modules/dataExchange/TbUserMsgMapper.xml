@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whty.dmp.modules.dataExchange.dao.TbUserMsgDao">
+
+  <!-- 
+       1.增加、删除、修改 适用于数据的订阅
+       2.根据时间条件查询适用于数据的发布
+   -->
+ <!-- start  ###############发布相关的sql############### -->
+    <sql id="resultColumn">
+        user_id as id,
+        name,
+        account,
+        default_identity as defaultIdentity,
+        password,
+        phone,
+        email,
+        wechat,
+        qq_num as qqNum,
+        school_roll_no as schoolRollNo,
+        id_card_no as idCardNo,
+        birthday,
+        gender,
+        province_code as provinceCode,
+        city_code as cityCode,
+        area_code as areaCode,
+        address,
+        active_state as activeState,
+        default_pwd as defaultPwd
+    </sql>
+    
+    <!-- 查询列表 -->
+    <select id="selectList" parameterType="TbUserMsgVo" resultType="TbUserMsgVo">        
+        select <include refid="resultColumn" /> 
+        from tb_zuser where 
+        <![CDATA[
+        data_ex_flag = #{dataExFlag} and data_ex_from = #{dataExFrom} limit 200 
+        ]]>
+    </select>
+    
+      <!-- 查询删除的数据列表 -->
+    <select id="selectDeleteList" parameterType="TbUserMsgVo" resultType="TbUserMsgVo">
+        select person_id as id,name 
+        from T_USER_DEL_FOR_SYN where
+         <![CDATA[
+        data_ex_flag = #{dataExFlag} and limit 200  
+        ]]>
+    </select>
+    
+    <update id="updateFlagBatch" parameterType="list">
+    	update tb_zuser set data_ex_flag = '9' 
+    	where user_id in 
+    	 <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+    
+    <update id="updateFlagSingle" parameterType="DataLogVo">
+    	update tb_zuser set 
+    	<choose>
+    		<when test="dataStatus=='0'.toString() ">
+    			data_ex_flag = '9' 
+    		</when>
+    		<otherwise>
+    			data_ex_flag = '10' 
+    		</otherwise>
+    	</choose>
+    	where user_id = #{objId}
+    </update>
+    
+    <update id="updateDelFlagBatch" parameterType="list">
+    	update T_USER_DEL_FOR_SYN set data_ex_flag = '9' 
+    	where id in 
+    	 <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+    
+    <update id="updateDelFlagSingle" parameterType="DataLogVo">
+    	update T_USER_DEL_FOR_SYN set 
+    	<choose>
+    		<when test="dataStatus=='0'.toString() ">
+    			data_ex_flag = '9' 
+    		</when>
+    		<otherwise>
+    			data_ex_flag = '10' 
+    		</otherwise>
+    	</choose>
+    	where person_id = #{objId}
+    </update> 
+    
+    <!-- 查询更新列表
+    <select id="selectUpdateList" parameterType="UserMsgVo" resultType="UserMsgVo">
+       select u.PERSON_ID id,u.NAME name,u.NICKNAME nickname,trim(u.CRED_TYPE) credType,u.ID_CARD_NO idCardNo,u.GENDER sex,u.ADDRESS address,
+        u.EMAILS emails,u.PHONE_numbers phoneNumbers,u.USER_TYPE userType,to_char(u.DATE_OF_BIRTH,'yyyy-MM-dd') birthDay,
+        o.ORGA_ID orgaId,o.PRIVINCE_CODE provinceCode,o.AREA_CODE cityCode,o.CITY_CODE areaCode from t_user u 
+		left join t_user_group_rel r on r.person_id = u.person_id and r.status='0' and r.group_category in ('0','1') and rownum=1 
+		left join t_organization o on r.group_id = o.orga_id 
+       where  u.data_from = '0' and 
+          u.update_time &gt; u.create_time and
+          u.update_time &gt;= #{updateTime}
+        <if test="nowTime !=null and nowTime !=''">
+            and u.update_time &lt;= #{nowTime}
+        </if>
+    </select>
+     -->
+  <!-- end  ###############发布相关的sql############### --> 
+  
+  <!-- start  ###############订阅相关的sql############### -->
+    <!-- 插入 -->
+    <insert id="insert" parameterType="TbUserMsgVo">
+        insert into t_user(
+            PERSON_ID,
+	        NAME,
+	        NICKNAME,
+	        GENDER,
+	        ID_CARD_NO,
+	        CRED_TYPE,
+	        USER_TYPE,
+	        PHONE_NUMBERS,
+	        EMAILS,
+	        ADDRESS,
+	        DATE_OF_BIRTH,
+	        THUMBNAIL_URL,
+	        STUDENT_ROLL_NO,
+	        REGI_TIME,
+	        DATA_EX_FROM
+        ) values (
+            #{id},
+            #{name},
+            #{nickname},
+            #{sex},
+            #{idCardNo},
+            #{credType},
+            #{userType},
+            #{phoneNumbers},
+            #{emails},
+            #{address},
+            #{birthDay},
+            #{imgUrl},
+            #{stuNum},
+            sysdate,
+            '1'
+        )
+    </insert>
+    
+    <!-- 更新 -->
+    <update id="update" parameterType="TbUserMsgVo">
+        update t_user set 
+            <if test="name != null and name !=''">NAME=#{name}</if>
+            <if test="nickname != null and nickname !=''">NICKNAME=#{nickname},</if>
+            <if test="sex != null and sex !=''">GENDER=#{sex},</if>
+            <if test="idCardNo != null and idCardNo !=''">ID_CARD_NO=#{idCardNo},</if>
+            <if test="credType != null and credType !=''">CRED_TYPE=#{credType},</if>
+            <if test="userType != null and userType !=''">USER_TYPE=#{userType},</if>
+            <if test="phoneNumbers != null and phoneNumbers !=''">PHONE_NUMBERS=#{phoneNumbers},</if>
+            <if test="emails != null and emails !=''">EMAILS=#{emails},</if>
+            <if test="address != null and address !=''">ADDRESS=#{address},</if>
+            <if test="birthDay != null and birthDay !=''">DATE_OF_BIRTH=#{birthDay},</if>
+            <if test="imgUrl != null and imgUrl !=''">THUMBNAIL_URL=#{imgUrl},</if>
+            <if test="stuNum != null and stuNum !=''">STUDENT_ROLL_NO=#{stuNum},</if>
+        UPDATE_TIME = #{updateTime} 
+        where PERSON_ID = #{id} and DATA_EX_FROM = '1' 
+    </update>
+    
+   <!-- 根据主键删除 -->
+    <delete id="delete" parameterType="TbUserMsgVo">
+        delete from t_user
+              where PERSON_ID = #{id} and DATA_EX_FROM='1' 
+    </delete>
+    
+        
+    <!-- 查询单个 -->
+    <select id="selectOne" parameterType="TbUserMsgVo" resultType="TbUserMsgVo">
+        select <include refid="resultColumn" />
+        from t_user where PERSON_ID = #{id}
+    </select>
+</mapper>

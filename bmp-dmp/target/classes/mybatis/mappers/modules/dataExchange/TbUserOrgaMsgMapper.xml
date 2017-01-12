@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whty.dmp.modules.dataExchange.dao.TbUserOrgaMsgDao">
+
+  <!-- 
+       1.增加、删除、修改 适用于数据的订阅
+       2.根据时间条件查询适用于数据的发布
+   -->
+ <!-- start  ###############发布相关的sql############### -->
+    <sql id="resultColumn">
+    	id,
+        user_id as userId,
+        orga_id as orgaId,
+        status,
+        orga_domain as orgaDomain,
+        orga_type as orgaType
+    </sql>
+    
+    <!-- 查询新增列表 -->
+    <select id="selectList" parameterType="TbUserOrgaMsgVo" resultType="TbUserOrgaMsgVo">
+        select <include refid="resultColumn" />
+        from tb_zuser_orga where
+        <![CDATA[ 
+         data_ex_flag = #{dataExFlag}  and data_ex_from = #{dataExFrom} limit 200
+        ]]>
+    </select>
+    
+     <!-- 查询删除的数据列表 -->
+    <select id="selectDeleteList" parameterType="TbUserOrgaMsgVo" resultType="TbUserOrgaMsgVo">
+        select t_user_group_id as id,person_id as userId,group_id as classInfoId
+        from T_REL_DEL_FOR_SYN where
+         <![CDATA[
+        data_ex_flag = #{dataExFlag} and (group_category='0' or group_category='1')  and status='0' limit 200
+        ]]>
+    </select>
+        
+    <update id="updateFlagBatch" parameterType="list">
+    	update tb_zuser_orga set data_ex_flag = '9' 
+    	where id in 
+    	 <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+    
+    <update id="updateFlagSingle" parameterType="DataLogVo">
+    	update tb_zuser_orga set 
+    	<choose>
+    		<when test="dataStatus=='0'.toString()">
+    			data_ex_flag = '9' 
+    		</when>
+    		<otherwise>
+    			data_ex_flag = '10' 
+    		</otherwise>
+    	</choose>
+    	where id = #{objId}
+    </update>
+    
+     <update id="updateDelFlagBatch" parameterType="list">
+    	update T_REL_DEL_FOR_SYN set data_ex_flag = '9' 
+    	where t_user_group_id in 
+    	 <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </update>
+    
+    <update id="updateDelFlagSingle" parameterType="DataLogVo">
+    	update T_REL_DEL_FOR_SYN set 
+    	<choose>
+    		<when test="dataStatus=='0'.toString() ">
+    			data_ex_flag = '9' 
+    		</when>
+    		<otherwise>
+    			data_ex_flag = '10' 
+    		</otherwise>
+    	</choose>
+    	where t_user_group_id = #{objId}
+    </update>
+  <!-- end  ###############发布相关的sql############### --> 
+  
+  <!-- start  ###############订阅相关的sql############### -->  
+    <!-- 插入 -->
+    <insert id="insert" parameterType="TbUserOrgaMsgVo">
+        insert into t_user_group_rel(
+            T_USER_GROUP_ID,
+            PERSON_ID,
+            GROUP_ID,
+            GROUP_CATEGORY,
+            STATUS,
+            JOIN_IN_TIME,
+            DATA_EX_FROM
+        ) values (
+            #{id},
+            #{userId},
+            #{orgaId},
+            <choose>
+    			<when test="orgaClassify==21 ">
+    				'0', 
+    			</when>
+    			<when test="orgaClassify==22 ">
+    				'1', 
+    			</when>
+    			<otherwise>
+    				null,
+    			</otherwise>
+    		</choose>
+            '0',
+            sysdate,
+            '1'
+        )
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="TbUserOrgaMsgVo">
+        update t_user_group_rel
+        <set>
+            <if test="userId != null and userId !=''">PERSON_ID=#{userId}</if>
+            <if test="classInfoId != null and classInfoId !=''">GROUP_ID=#{classInfoId},</if>
+            UPDATETIME = #{updateTime}
+        </set>
+        where T_USER_GROUP_ID = #{id} and DATA_EX_FROM = '1' 
+    </update>
+
+    <!-- 根据主键删除 -->
+    <delete id="delete" parameterType="TbUserOrgaMsgVo">
+        delete from t_user_group_rel
+              where T_USER_GROUP_ID = #{id} and DATA_EX_FROM = '1' 
+    </delete>
+ <!-- end  ###############订阅相关的sql############### -->
+        
+    <!-- 查询单个 -->
+    <select id="selectOne" parameterType="TbUserOrgaMsgVo" resultType="TbUserOrgaMsgVo">
+        select <include refid="resultColumn" />
+        from t_user_group_rel where T_USER_GROUP_ID = #{id}
+    </select>
+</mapper>
