@@ -59,7 +59,7 @@ public class PublishTest extends JunitTest{
 	
 	@Test
 	public void orgaSubscribeTest(){
-		tbOrgaMsgService.subscribeOragList();
+		tbOrgaMsgService.subscribeTbOragList();
 	}
 	
 	
@@ -70,17 +70,17 @@ public class PublishTest extends JunitTest{
 	
 	@Test
 	public void userSubscribeTest(){
-		tbUserMsgService.subscribeUserList();
+		tbUserMsgService.subscribeTbUserList();;
 	}
 	
 	@Test
 	public void userOrgaRelSubscribeTest(){
-		tbUserOrgaMsgService.subscribeUserOrgaRelList();
+		tbUserOrgaMsgService.subscribeTbUserOrgaList();
 	}
 	
 	@Test
 	public void userClassRelSubscribeTest(){
-		tbUserIdentityMsgService.subscribeUserClassRelList();
+		tbUserIdentityMsgService.subscribeTbUserIdentityList();
 	}
 	
 	public static void main(String[] args){

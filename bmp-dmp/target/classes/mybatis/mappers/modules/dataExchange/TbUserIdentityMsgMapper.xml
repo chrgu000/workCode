@@ -79,20 +79,20 @@
   <!-- start  ###############订阅相关的sql############### -->   
     <!-- 插入 -->
     <insert id="insert" parameterType="TbUserIdentityMsgVo">
-        insert into t_user_group_rel(
-            T_USER_GROUP_ID,
-            PERSON_ID,
-            GROUP_ID,
-            GROUP_CATEGORY,
-            STATUS,
-            JOIN_IN_TIME,
-            DATA_EX_FROM
+        insert into tb_zuser_identity(
+            id,
+            user_id,
+            identity_id,
+            orga_id,
+            status,
+            create_time,
+            data_ex_from 
         ) values (
             #{id},
             #{userId},
-            #{classInfoId},
-            '2',
-            '0',
+            #{identityId},
+            #{orgaId},
+            #{status},
             sysdate,
             '1'
         )
@@ -100,11 +100,13 @@
 
     <!-- 更新 -->
     <update id="update" parameterType="TbUserIdentityMsgVo">
-        update t_user_group_rel set 
-            <if test="userId != null and userId !=''">PERSON_ID=#{userId}</if>
-            <if test="classInfoId != null and classInfoId !=''">GROUP_ID=#{classInfoId},</if>
-            UPDATETIME = #{updateTime}
-        where T_USER_GROUP_ID = #{id} and DATA_EX_FROM = '1' 
+        update tb_zuser_identity set 
+            <if test="userId != null and userId !=''">user_id=#{userId}</if>
+            <if test="identityId != null and identityId !=''">identity_id=#{identityId},</if>
+            <if test="orgaId != null and orgaId !=''">orga_id=#{orgaId},</if>
+            <if test="status != null and status !=''">status=#{status},</if>
+            update_time = sysdate 
+        where id = #{id} and data_ex_from = '1' 
     </update>
     
     

@@ -77,7 +77,7 @@ public class DataConstants {
 	/**
 	 * 机构数据订阅的serviceCode
 	 */
-	public static final String serviceCode_orga_d = "serviceCode_orga_d";
+	public static final String serviceCode_tbOrga_d = "serviceCode_tbOrga_d";
 	
 	/**
 	 * 班级数据订阅的serviceCode
@@ -92,17 +92,17 @@ public class DataConstants {
 	/**
 	 * 用户数据订阅的serviceCode
 	 */
-	public static final String serviceCode_user_d = "serviceCode_user_d";
+	public static final String serviceCode_tbUser_d = "serviceCode_tbUser_d";
 	
 	/**
 	 * 用户班级关系数据订阅的serviceCode
 	 */
-	public static final String serviceCode_userClassRel_d = "serviceCode_userClassRel_d";
+	public static final String serviceCode_tbUserIdentity_d = "serviceCode_tbUserIdentity_d";
 	
 	/**
 	 * 用户机构关系数据订阅的serviceCode
 	 */
-	public static final String serviceCode_userOrgaRel_d = "serviceCode_userOrgaRel_d";
+	public static final String serviceCode_tbUserOrga_d = "serviceCode_tbUserOrga_d";
 	
 	/**
 	 * 机构发布

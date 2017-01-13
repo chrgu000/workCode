@@ -53,7 +53,7 @@ public class TbOrgaMsgService {
 	 */
 	public void publishTbOrgaBatch(){
 		//发布新增未发布的数据
-		//publishTbOrga(StatusConstants.DATA_EX_FLAG_ADD,StatusConstants.OPERATOR_TYPE_ADD);
+		publishTbOrga(StatusConstants.DATA_EX_FLAG_ADD,StatusConstants.OPERATOR_TYPE_ADD);
 		//发布修改未发布的数据
 		publishTbOrga(StatusConstants.DATA_EX_FLAG_EDIT,StatusConstants.OPERATOR_TYPE_EDIT);
 		//发布删除未发布的数据
@@ -204,10 +204,10 @@ public class TbOrgaMsgService {
 	 */
 	@Transactional
 	@SuppressWarnings("unchecked")
-	public void subscribeOragList() {
+	public void subscribeTbOragList() {
 		logger.info("start-------------开始消费数据----------------");
 		//1.获取数据
-		String serviceCode_d = ConfigDictUtils.getDictValue(DataConstants.serviceCode_orga_d, DataConstants.serviceCode);
+		String serviceCode_d = ConfigDictUtils.getDictValue(DataConstants.serviceCode_tbOrga_d, DataConstants.serviceCode);
 		String result = DataMsgUtils.subscribeData(serviceCode_d);//订阅的服务code
 		if(JsonUtils.isJson(result)){
 			//2.解析List<String>
@@ -216,13 +216,13 @@ public class TbOrgaMsgService {
 			List<TbOrgaMsgVo> msgList = Lists.newArrayList();
 			List<TbOrgaMsgVo> failList = Lists.newArrayList();
 			for(String object : resultList){
-				TbOrgaMsgVo orgaMsgVo = (TbOrgaMsgVo) JsonUtils.jsonToObj(object, TbOrgaMsgVo.class);
+				TbOrgaMsgVo tbOrgaMsgVo = (TbOrgaMsgVo) JsonUtils.jsonToObj(object, TbOrgaMsgVo.class);
 				// 2.1.执行具体的业务操作
-				boolean flag = subscribeOperator(orgaMsgVo);
+				boolean flag = subscribeOperator(tbOrgaMsgVo);
 				if(flag){
-					msgList.add(orgaMsgVo);
+					msgList.add(tbOrgaMsgVo);
 				}else{
-					failList.add(orgaMsgVo);
+					failList.add(tbOrgaMsgVo);
 				}
 			}
 			//3.转换为解析日志，保存入库
@@ -244,14 +244,14 @@ public class TbOrgaMsgService {
 		}
 	}
 	
-	private boolean subscribeOperator(TbOrgaMsgVo orgaMsgVo){
+	private boolean subscribeOperator(TbOrgaMsgVo tbOrgaMsgVo){
 		try{
-			if(DataMsgVo.OPER_INSERT == orgaMsgVo.getOperatorType()){
-				tbOrgaMsgDao.insert(orgaMsgVo);
-			}else if (DataMsgVo.OPER_UPDATE == orgaMsgVo.getOperatorType()) {
-				tbOrgaMsgDao.update(orgaMsgVo);
-			} else if (DataMsgVo.OPER_DELETE == orgaMsgVo.getOperatorType()) {
-				tbOrgaMsgDao.delete(orgaMsgVo);
+			if(DataMsgVo.OPER_INSERT == tbOrgaMsgVo.getOperatorType()){
+				tbOrgaMsgDao.insert(tbOrgaMsgVo);
+			}else if (DataMsgVo.OPER_UPDATE == tbOrgaMsgVo.getOperatorType()) {
+				tbOrgaMsgDao.update(tbOrgaMsgVo);
+			} else if (DataMsgVo.OPER_DELETE == tbOrgaMsgVo.getOperatorType()) {
+				tbOrgaMsgDao.delete(tbOrgaMsgVo);
 			}
 			return true;
 		}catch(Exception e){

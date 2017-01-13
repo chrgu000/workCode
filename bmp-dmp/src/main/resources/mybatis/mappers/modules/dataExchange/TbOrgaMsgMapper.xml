@@ -88,30 +88,36 @@
   <!-- start  ###############订阅相关的sql############### -->
      <!-- 插入 -->
     <insert id="insert" parameterType="TbOrgaMsgVo">
-        insert into t_organization(
+        insert into tb_orga(
             orga_id,
             orga_name,
-            privince_code,
-            area_code,
-            city_code,
             orga_code,
-            orga_cage,
+            orga_domain,
+            region_id,
+            province_code,
+            city_code,
+            area_code,
             orga_type,
-            parent_orga_id,
-            status,
-            createtime,
+            parent_id,
+            level,
+            sort_num,
+            orga_address,
+            create_time,
             data_ex_from
         ) values (
             #{id},
             #{orgaName},
+            #{orgaCode},
+            #{orgaDomain},
+            #{regionId},
             #{provinceCode},
             #{cityCode},
             #{areaCode},
-            #{orgaCode},
-            #{orgaCage},
             #{orgaType},
-            #{parentOrgaId},
-            #{status},
+            #{parentId},
+            #{orgaLevel},
+            #{sortNum},
+            #{orgaAddress},
             sysdate,
             '1'
         )
@@ -119,23 +125,26 @@
     
     <!-- 更新 -->
     <update id="update" parameterType="TbOrgaMsgVo">
-        update t_organization set
+        update tb_orga set
         	<if test="orgaName != null and orgaName !=''">orga_name=#{orgaName},</if>
-        	<if test="provinceCode != null and provinceCode !=''">privince_code=#{provinceCode},</if>
-            <if test="areaCode != null and areaCode !=''">area_code=#{cityCode},</if>
-            <if test="cityCode != null and cityCode !=''">city_code=#{areaCode},</if>
-            <if test="orgaCode != null and orgaCode !=''">orga_code=#{orgaCode},</if>
-            <if test="orgaCage != null and orgaCage !=''">orga_cage=#{orgaCage},</if>
+        	<if test="orgaCode != null and orgaCode !=''">orga_code=#{orgaCode},</if>
+        	<if test="orgaDomain != null and orgaDomain !=''">orga_domain=#{orgaDomain},</if>
+        	<if test="regionId != null and regionId !=''">region_id=#{regionId},</if>
+        	<if test="provinceCode != null and provinceCode !=''">province_code=#{provinceCode},</if>
+            <if test="cityCode != null and cityCode !=''">city_code=#{cityCode},</if>
+            <if test="areaCode != null and areaCode !=''">area_code=#{areaCode},</if>
             <if test="orgaType != null and orgaType !=''">orga_type=#{orgaType},</if>
-            <if test="parentOrgaId != null and parentOrgaId !=''">parent_orga_id=#{parentOrgaId},</if>
-            <if test="status != null and status !=''">status=#{status},</if>
+            <if test="parentId != null and parentId !=''">parent_id=#{parentId},</if>
+            <if test="orgaLevel != null and orgaLevel !=''">level=#{orgaLevel},</if>
+            <if test="sortNum != null and sortNum !=''">sort_num=#{sortNum},</if>
+            <if test="orgaAddress != null and orgaAddress !=''">orga_address=#{orgaAddress},</if>
            	update_time = sysdate 
         where orga_id = #{id} and DATA_EX_FROM = '1' 
     </update>
     
       <!-- 根据主键删除 -->
     <delete id="delete" parameterType="TbOrgaMsgVo">
-        delete from t_organization
+        delete from tb_orga
               where orga_id = #{id} and DATA_EX_FROM='1' 
     </delete>
  <!-- end  ###############订阅相关的sql############### -->

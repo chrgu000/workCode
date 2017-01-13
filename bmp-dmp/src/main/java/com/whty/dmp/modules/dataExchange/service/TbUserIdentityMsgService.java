@@ -203,10 +203,10 @@ public class TbUserIdentityMsgService {
 	 */
 	@Transactional
 	@SuppressWarnings("unchecked")
-	public void subscribeUserClassRelList(){
+	public void subscribeTbUserIdentityList(){
 		logger.info("start-------------开始消费数据----------------");
 		//1.获取数据
-		String serviceCode_d = ConfigDictUtils.getDictValue(DataConstants.serviceCode_userClassRel_d, DataConstants.serviceCode);
+		String serviceCode_d = ConfigDictUtils.getDictValue(DataConstants.serviceCode_tbUserIdentity_d, DataConstants.serviceCode);
 		String result = DataMsgUtils.subscribeData(serviceCode_d);//订阅的服务code
 		if(JsonUtils.isJson(result)){
 			//2.解析List<String>
@@ -214,13 +214,13 @@ public class TbUserIdentityMsgService {
 			List<TbUserIdentityMsgVo> msgList = Lists.newArrayList();
 			List<TbUserIdentityMsgVo> failList = Lists.newArrayList(); //订阅失败的数据
 			for(String object : resultList){
-				TbUserIdentityMsgVo userClassRelInfoVo = (TbUserIdentityMsgVo) JsonUtils.jsonToObj(object, TbUserIdentityMsgVo.class);
+				TbUserIdentityMsgVo tbUserIdentityMsgVo = (TbUserIdentityMsgVo) JsonUtils.jsonToObj(object, TbUserIdentityMsgVo.class);
 				// 2.1.执行具体的业务操作
-				boolean flag = subscribeOperator(userClassRelInfoVo);
+				boolean flag = subscribeOperator(tbUserIdentityMsgVo);
 				if(flag){
-					msgList.add(userClassRelInfoVo);
+					msgList.add(tbUserIdentityMsgVo);
 				}else{
-					failList.add(userClassRelInfoVo);
+					failList.add(tbUserIdentityMsgVo);
 				}
 			}
 			//3.转换为解析日志，保存入库
@@ -243,14 +243,14 @@ public class TbUserIdentityMsgService {
 	}	
 		
 
-	private boolean subscribeOperator(TbUserIdentityMsgVo userClassRelInfoVo){
+	private boolean subscribeOperator(TbUserIdentityMsgVo tbUserIdentityMsgVo){
 		try{
-			if(DataMsgVo.OPER_INSERT == userClassRelInfoVo.getOperatorType()){
-				tbUserIdentityMsgDao.insert(userClassRelInfoVo);
-			}else if (DataMsgVo.OPER_UPDATE == userClassRelInfoVo.getOperatorType()) {
-				tbUserIdentityMsgDao.update(userClassRelInfoVo);
-			} else if (DataMsgVo.OPER_DELETE == userClassRelInfoVo.getOperatorType()) {
-				tbUserIdentityMsgDao.delete(userClassRelInfoVo);
+			if(DataMsgVo.OPER_INSERT == tbUserIdentityMsgVo.getOperatorType()){
+				tbUserIdentityMsgDao.insert(tbUserIdentityMsgVo);
+			}else if (DataMsgVo.OPER_UPDATE == tbUserIdentityMsgVo.getOperatorType()) {
+				tbUserIdentityMsgDao.update(tbUserIdentityMsgVo);
+			} else if (DataMsgVo.OPER_DELETE == tbUserIdentityMsgVo.getOperatorType()) {
+				tbUserIdentityMsgDao.delete(tbUserIdentityMsgVo);
 			}
 			return true;
 		}catch(Exception e){

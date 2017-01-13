@@ -215,10 +215,10 @@ public class TbUserMsgService {
 	 */
 	@Transactional
 	@SuppressWarnings("unchecked")
-	public void subscribeUserList(){
+	public void subscribeTbUserList(){
 		logger.info("start-------------开始消费数据----------------");
 		//1.获取数据
-		String serviceCode_d = ConfigDictUtils.getDictValue(DataConstants.serviceCode_user_d, DataConstants.serviceCode);
+		String serviceCode_d = ConfigDictUtils.getDictValue(DataConstants.serviceCode_tbUser_d, DataConstants.serviceCode);
 		String result = DataMsgUtils.subscribeData(serviceCode_d);//订阅的服务code
 		if(JsonUtils.isJson(result)){
 			//2.解析List<String>
@@ -226,13 +226,13 @@ public class TbUserMsgService {
 			List<TbUserMsgVo> msgList = Lists.newArrayList();
 			List<TbUserMsgVo> failList = Lists.newArrayList(); //订阅失败的数据
 			for(String object : resultList){
-				TbUserMsgVo userInfoVo = (TbUserMsgVo) JsonUtils.jsonToObj(object, TbUserMsgVo.class);
+				TbUserMsgVo tbUserInfoVo = (TbUserMsgVo) JsonUtils.jsonToObj(object, TbUserMsgVo.class);
 				// 2.1.执行具体的业务操作
-				boolean flag = subscribeOperator(userInfoVo);
+				boolean flag = subscribeOperator(tbUserInfoVo);
 				if(flag){
-					msgList.add(userInfoVo);
+					msgList.add(tbUserInfoVo);
 				}else{
-					failList.add(userInfoVo);
+					failList.add(tbUserInfoVo);
 				}
 			}
 			//3.转换为解析日志，保存入库
@@ -254,14 +254,14 @@ public class TbUserMsgService {
 		}
 	}	
 	
-	private boolean subscribeOperator(TbUserMsgVo userInfoVo){
+	private boolean subscribeOperator(TbUserMsgVo tbUserInfoVo){
 		try{
-			if(DataMsgVo.OPER_INSERT == userInfoVo.getOperatorType()){
-				tbUserMsgDao.insert(userInfoVo);
-			}else if (DataMsgVo.OPER_UPDATE == userInfoVo.getOperatorType()) {
-				tbUserMsgDao.update(userInfoVo);
-			} else if (DataMsgVo.OPER_DELETE == userInfoVo.getOperatorType()) {
-				tbUserMsgDao.delete(userInfoVo);
+			if(DataMsgVo.OPER_INSERT == tbUserInfoVo.getOperatorType()){
+				tbUserMsgDao.insert(tbUserInfoVo);
+			}else if (DataMsgVo.OPER_UPDATE == tbUserInfoVo.getOperatorType()) {
+				tbUserMsgDao.update(tbUserInfoVo);
+			} else if (DataMsgVo.OPER_DELETE == tbUserInfoVo.getOperatorType()) {
+				tbUserMsgDao.delete(tbUserInfoVo);
 			}
 			return true;
 		}catch(Exception e){

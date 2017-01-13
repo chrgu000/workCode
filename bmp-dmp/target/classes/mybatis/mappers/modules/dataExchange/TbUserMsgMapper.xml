@@ -109,36 +109,48 @@
   <!-- start  ###############订阅相关的sql############### -->
     <!-- 插入 -->
     <insert id="insert" parameterType="TbUserMsgVo">
-        insert into t_user(
-            PERSON_ID,
-	        NAME,
-	        NICKNAME,
-	        GENDER,
-	        ID_CARD_NO,
-	        CRED_TYPE,
-	        USER_TYPE,
-	        PHONE_NUMBERS,
-	        EMAILS,
-	        ADDRESS,
-	        DATE_OF_BIRTH,
-	        THUMBNAIL_URL,
-	        STUDENT_ROLL_NO,
-	        REGI_TIME,
-	        DATA_EX_FROM
+        insert into tb_zuser(
+            user_id,
+	        name,
+	        account,
+	        default_identity,
+	        password,
+	        phone,
+	        email,
+	        wechat,
+	        qq_num,
+	        school_roll_no,
+	        id_card_no,
+	        birthday,
+	        gender,
+	        province_code,
+	        city_code,
+	        area_code,
+	        address,
+	        active_state,
+	        default_pwd,
+	        create_time,
+	        data_ex_from
         ) values (
             #{id},
             #{name},
-            #{nickname},
-            #{sex},
+            #{account},
+            #{defaultIdentity},
+            #{password},
+            #{phone},
+            #{email},
+            #{wechat},
+            #{qqNum},
+            #{schoolRollNo},
             #{idCardNo},
-            #{credType},
-            #{userType},
-            #{phoneNumbers},
-            #{emails},
+            #{birthday},
+            #{gender},
+            #{provinceCode},
+            #{cityCode},
+            #{areaCode},
             #{address},
-            #{birthDay},
-            #{imgUrl},
-            #{stuNum},
+            #{activeState},
+            #{defaultPwd},
             sysdate,
             '1'
         )
@@ -146,21 +158,27 @@
     
     <!-- 更新 -->
     <update id="update" parameterType="TbUserMsgVo">
-        update t_user set 
-            <if test="name != null and name !=''">NAME=#{name}</if>
-            <if test="nickname != null and nickname !=''">NICKNAME=#{nickname},</if>
-            <if test="sex != null and sex !=''">GENDER=#{sex},</if>
-            <if test="idCardNo != null and idCardNo !=''">ID_CARD_NO=#{idCardNo},</if>
-            <if test="credType != null and credType !=''">CRED_TYPE=#{credType},</if>
-            <if test="userType != null and userType !=''">USER_TYPE=#{userType},</if>
-            <if test="phoneNumbers != null and phoneNumbers !=''">PHONE_NUMBERS=#{phoneNumbers},</if>
-            <if test="emails != null and emails !=''">EMAILS=#{emails},</if>
-            <if test="address != null and address !=''">ADDRESS=#{address},</if>
-            <if test="birthDay != null and birthDay !=''">DATE_OF_BIRTH=#{birthDay},</if>
-            <if test="imgUrl != null and imgUrl !=''">THUMBNAIL_URL=#{imgUrl},</if>
-            <if test="stuNum != null and stuNum !=''">STUDENT_ROLL_NO=#{stuNum},</if>
-        UPDATE_TIME = #{updateTime} 
-        where PERSON_ID = #{id} and DATA_EX_FROM = '1' 
+        update tb_zuser set 
+            <if test="name != null and name !=''">name=#{name}</if>
+            <if test="account != null and account !=''">account=#{account},</if>
+            <if test="defaultIdentity != null and defaultIdentity !=''">default_Identity=#{defaultIdentity},</if>
+            <if test="password != null and password !=''">password=#{password},</if>
+            <if test="phone != null and phone !=''">phone=#{phone},</if>
+            <if test="email != null and email !=''">email=#{email},</if>
+            <if test="wechat != null and wechat !=''">wechat=#{wechat},</if>
+            <if test="qqNum != null and qqNum !=''">qq_num=#{qqNum},</if>
+            <if test="schoolRollNo != null and schoolRollNo !=''">school_roll_no=#{schoolRollNo},</if>
+            <if test="idCardNo != null and idCardNo !=''">id_card_no=#{idCardNo},</if>
+            <if test="birthday != null and birthday !=''">birthday=#{birthday},</if>
+            <if test="gender != null and gender !=''">gender=#{gender},</if>
+            <if test="provinceCode != null and provinceCode !=''">provice_code=#{provinceCode},</if>
+            <if test="cityCode != null and cityCode !=''">city_code=#{cityCode},</if>
+            <if test="areaCode != null and areaCode !=''">area_code=#{areaCode},</if>
+            <if test="address != null and address !=''">address=#{address},</if>
+            <if test="activeState != null and activeState !=''">active_state=#{activeState},</if>
+            <if test="defaultPwd != null and defaultPwd !=''">default_pwd=#{defaultPwd},</if>
+        update_time = sysdate  
+        where user_id = #{id} and data_ex_from = '1' 
     </update>
     
    <!-- 根据主键删除 -->
