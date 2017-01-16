@@ -6,7 +6,6 @@ import java.util.Map;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.whty.dmp.modules.dataExchange.service.ClassInfoMsgService;
 import com.whty.dmp.modules.dataExchange.service.TbOrgaMsgService;
 import com.whty.dmp.modules.dataExchange.service.TbUserIdentityMsgService;
 import com.whty.dmp.modules.dataExchange.service.TbUserMsgService;
@@ -34,7 +33,9 @@ public class PublishTest extends JunitTest{
 	
 	@Test
 	public void orgaPublishTest(){
+		for(int i=0;i<67;i++){
 		tbOrgaMsgService.publishTbOrgaBatch();
+		}
 	}
 	
 	

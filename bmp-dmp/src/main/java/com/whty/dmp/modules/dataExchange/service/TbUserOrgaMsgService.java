@@ -57,7 +57,7 @@ public class TbUserOrgaMsgService {
 		publishTbUserOrga(StatusConstants.DATA_EX_FLAG_ADD,StatusConstants.OPERATOR_TYPE_ADD);
 		publishTbUserOrga(StatusConstants.DATA_EX_FLAG_EDIT,StatusConstants.OPERATOR_TYPE_EDIT);
 		//发布删除未发布的数据
-		//publishDelUserOrgaRel(StatusConstants.DATA_EX_FLAG_DELETE,StatusConstants.OPERATOR_TYPE_DELETE);
+		publishDelUserOrgaRel(StatusConstants.DATA_EX_FLAG_DELETE,StatusConstants.OPERATOR_TYPE_DELETE);
 	}
 	
 	private void publishTbUserOrga(String dataStatus,String operatorType){
@@ -79,8 +79,8 @@ public class TbUserOrgaMsgService {
 	private void publishDelUserOrgaRel(String dataStatus,String operatorType){
 		if(StringUtils.isNotBlank(dataStatus)){
 			TbUserOrgaMsgVo queryBean = new TbUserOrgaMsgVo();
-			//queryBean.setDataExFrom(StatusConstants.DATA_EX_FROM_LOCAL);
-			queryBean.setDataExFlag(dataStatus);  
+			queryBean.setDataExFrom(StatusConstants.DATA_EX_FROM_LOCAL);
+			queryBean.setDataExFlag(dataStatus);    
 			//新增未发布和修改未发布的数据都以新增操作发布
 			List<TbUserOrgaMsgVo> newList = null;
 			if ((newList = tbUserOrgaMsgDao.selectDeleteList(queryBean)) != null && newList.size() > 0) {

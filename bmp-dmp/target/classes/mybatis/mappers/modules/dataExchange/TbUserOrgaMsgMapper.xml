@@ -21,16 +21,16 @@
         select <include refid="resultColumn" />
         from tb_zuser_orga where
         <![CDATA[ 
-         data_ex_flag = #{dataExFlag}  and data_ex_from = #{dataExFrom} limit 200
+         data_ex_flag = #{dataExFlag}  and data_ex_from = #{dataExFrom} and status = '0' limit 200
         ]]>
     </select>
     
      <!-- 查询删除的数据列表 -->
     <select id="selectDeleteList" parameterType="TbUserOrgaMsgVo" resultType="TbUserOrgaMsgVo">
-        select t_user_group_id as id,person_id as userId,group_id as classInfoId
-        from T_REL_DEL_FOR_SYN where
-         <![CDATA[
-        data_ex_flag = #{dataExFlag} and (group_category='0' or group_category='1')  and status='0' limit 200
+         select <include refid="resultColumn" />
+        from tb_zuser_orga where
+        <![CDATA[ 
+         data_ex_flag = #{dataExFlag}  and data_ex_from = #{dataExFrom} and status = '1' limit 200
         ]]>
     </select>
         

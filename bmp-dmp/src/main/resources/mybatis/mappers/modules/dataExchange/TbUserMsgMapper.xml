@@ -34,16 +34,16 @@
         select <include refid="resultColumn" /> 
         from tb_zuser where 
         <![CDATA[
-        data_ex_flag = #{dataExFlag} and data_ex_from = #{dataExFrom} limit 200 
+        data_ex_flag = #{dataExFlag} and data_ex_from = #{dataExFrom} and status = '0' limit 200 
         ]]>
     </select>
     
       <!-- 查询删除的数据列表 -->
     <select id="selectDeleteList" parameterType="TbUserMsgVo" resultType="TbUserMsgVo">
-        select person_id as id,name 
-        from T_USER_DEL_FOR_SYN where
-         <![CDATA[
-        data_ex_flag = #{dataExFlag} and limit 200  
+        select <include refid="resultColumn" /> 
+        from tb_zuser where 
+        <![CDATA[
+        data_ex_flag = #{dataExFlag} and data_ex_from = #{dataExFrom} and status = '1' limit 200 
         ]]>
     </select>
     

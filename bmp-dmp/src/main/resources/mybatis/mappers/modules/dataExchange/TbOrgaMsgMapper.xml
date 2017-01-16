@@ -29,16 +29,16 @@
         select <include refid="resultColumn" />
         from tb_orga where
          <![CDATA[
-        data_ex_flag = #{dataExFlag} and data_ex_from = #{dataExFrom} limit 200
+        data_ex_flag = #{dataExFlag} and data_ex_from = #{dataExFrom} and status = '0' limit 200
         ]]>
     </select>
     
      <!-- 查询删除的数据列表 -->
     <select id="selectDeleteList" parameterType="TbOrgaMsgVo" resultType="TbOrgaMsgVo">
-        select orga_id as id ,orga_name as orgaName,privince_code as provinceCode,city_code as areaCode,area_code as cityCode, orga_cage as orgaCage,parent_orga_id as parentOrgaId 
-        from T_ORG_DEL_FOR_SYN where
+        select <include refid="resultColumn" />
+        from tb_orga where
          <![CDATA[
-        data_ex_flag = #{dataExFlag} limit 200
+        data_ex_flag = #{dataExFlag} and data_ex_from = #{dataExFrom} and status = '1' limit 200
         ]]>
     </select>
 

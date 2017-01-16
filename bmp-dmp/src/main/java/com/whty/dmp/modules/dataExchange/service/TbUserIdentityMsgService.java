@@ -57,7 +57,7 @@ public class TbUserIdentityMsgService {
 		publishTbUserIdentity(StatusConstants.DATA_EX_FLAG_ADD,StatusConstants.OPERATOR_TYPE_ADD);
 		publishTbUserIdentity(StatusConstants.DATA_EX_FLAG_EDIT,StatusConstants.OPERATOR_TYPE_EDIT);
 		//发布删除未发布的数据
-		//publishDelUserClassRel(StatusConstants.DATA_EX_FLAG_DELETE,StatusConstants.OPERATOR_TYPE_DELETE);
+		publishDelUserClassRel(StatusConstants.DATA_EX_FLAG_DELETE,StatusConstants.OPERATOR_TYPE_DELETE);
 	}
 	
 	private void publishTbUserIdentity(String dataStatus,String operatorType){
@@ -79,8 +79,8 @@ public class TbUserIdentityMsgService {
 	private void publishDelUserClassRel(String dataStatus,String operatorType){
 		if(StringUtils.isNotBlank(dataStatus)){
 			TbUserIdentityMsgVo queryBean = new TbUserIdentityMsgVo();
-			//queryBean.setDataExFrom(StatusConstants.DATA_EX_FROM_LOCAL);
-			queryBean.setDataExFlag(dataStatus);  
+			queryBean.setDataExFrom(StatusConstants.DATA_EX_FROM_LOCAL);
+			queryBean.setDataExFlag(dataStatus); 
 			//新增未发布和修改未发布的数据都以新增操作发布
 			List<TbUserIdentityMsgVo> newList = null;
 			if ((newList = tbUserIdentityMsgDao.selectDeleteList(queryBean)) != null && newList.size() > 0) {

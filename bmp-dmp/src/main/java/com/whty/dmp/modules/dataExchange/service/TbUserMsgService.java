@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.collect.Lists;
-import com.whty.dmp.core.base.vo.DataEntity;
 import com.whty.dmp.modules.admin.dao.ConfigDataDao;
 import com.whty.dmp.modules.admin.entity.ConfigDataVo;
 import com.whty.dmp.modules.admin.utils.ConfigDictUtils;
@@ -22,10 +21,8 @@ import com.whty.dmp.modules.dataExchange.common.StatusConstants;
 import com.whty.dmp.modules.dataExchange.dao.DataPublishLogDao;
 import com.whty.dmp.modules.dataExchange.dao.DataSubscribeLogDao;
 import com.whty.dmp.modules.dataExchange.dao.TbUserMsgDao;
-import com.whty.dmp.modules.dataExchange.dao.UserRelInfoDao;
 import com.whty.dmp.modules.dataExchange.entity.DataLogVo;
 import com.whty.dmp.modules.dataExchange.entity.TbUserMsgVo;
-import com.whty.dmp.modules.dataExchange.entity.UserRelInfoVo;
 import com.whty.dmp.utils.IdGen;
 import com.whty.dmp.utils.JsonUtils;
 
@@ -41,8 +38,6 @@ public class TbUserMsgService {
 	
 	@Autowired
 	private TbUserMsgDao tbUserMsgDao;
-	@Autowired
-	private UserRelInfoDao userRelInfoDao;
 	@Autowired
 	private ConfigDataDao configDataDao;// 数据配置dao
 	@Autowired
@@ -60,7 +55,7 @@ public class TbUserMsgService {
 		//发布修改未发布的数据
 		publishTbUser(StatusConstants.DATA_EX_FLAG_EDIT,StatusConstants.OPERATOR_TYPE_EDIT);
 		//发布删除未发布的数据
-		//publishDelUser(StatusConstants.DATA_EX_FLAG_DELETE,StatusConstants.OPERATOR_TYPE_DELETE);
+		publishDelUser(StatusConstants.DATA_EX_FLAG_DELETE,StatusConstants.OPERATOR_TYPE_DELETE);
 	}
 	
 	/**

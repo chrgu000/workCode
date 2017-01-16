@@ -57,7 +57,7 @@ public class TbOrgaMsgService {
 		//发布修改未发布的数据
 		publishTbOrga(StatusConstants.DATA_EX_FLAG_EDIT,StatusConstants.OPERATOR_TYPE_EDIT);
 		//发布删除未发布的数据
-		//publishDelTbOrga(StatusConstants.DATA_EX_FLAG_DELETE,StatusConstants.OPERATOR_TYPE_DELETE);
+		publishDelTbOrga(StatusConstants.DATA_EX_FLAG_DELETE,StatusConstants.OPERATOR_TYPE_DELETE);
 	}
 	
 	private void publishTbOrga(String dataStatus,String operatorType) {
@@ -78,6 +78,7 @@ public class TbOrgaMsgService {
 	private void publishDelTbOrga(String dataStatus,String operatorType){
 		if(StringUtils.isNotBlank(dataStatus)){
 			TbOrgaMsgVo queryBean = new TbOrgaMsgVo();
+			queryBean.setDataExFrom(StatusConstants.DATA_EX_FROM_LOCAL);
 			queryBean.setDataExFlag(dataStatus);
 			List<TbOrgaMsgVo> newList = null;
 			if ((newList = tbOrgaMsgDao.selectDeleteList(queryBean)) != null && newList.size() > 0) {
